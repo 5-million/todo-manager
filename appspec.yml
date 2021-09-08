@@ -5,6 +5,13 @@ files:
     destination: /home/ubuntu/app/todo-manager/build
     overwrite: yes
 
+permissions:
+  - object: /
+    pattern : "**"
+    owner : ubuntu
+    group: ubuntu
+
+
 hooks:
   AfterInstall:
     - location: deploy.sh
