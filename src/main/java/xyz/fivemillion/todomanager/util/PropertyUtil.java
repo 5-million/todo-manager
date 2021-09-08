@@ -6,7 +6,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 
 @Configuration
-@PropertySource("classpath:todos.yml")
+@PropertySource("classpath:application.yml")
 @RequiredArgsConstructor
 public class PropertyUtil {
 
