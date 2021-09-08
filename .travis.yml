@@ -31,5 +31,19 @@ deploy:
     local_dir: deploy
     wait-until-deployed: true
 
+  - provider: codedeploy
+    access_key_id: $AWS_ACCESS_KEY
+    secret_access_key: $AWS_SECRET_KEY
+    bucket: travis-build-zip
+    key: todo-manager.zip
+    bundle_type: zip
+    application: travis-todo-manager
+    deployment_group: todo-manager
+    region: us-east-2
+    wait-until-deployed: true
+    on:
+      repo: 5-million/todo-manager
+      branch: master
+
 before_install:
   - openssl aes-256-cbc -K $encrypted_1116e8e6e492_key -iv $encrypted_1116e8e6e492_iv -in application.yml.enc -out application.yml -d
