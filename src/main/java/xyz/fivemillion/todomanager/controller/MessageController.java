@@ -1,31 +1,33 @@
 package xyz.fivemillion.todomanager.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
-import xyz.fivemillion.todomanager.domain.TodoList;
-import xyz.fivemillion.todomanager.service.send.SlackSendService;
+import org.quartz.SchedulerException;
+import org.quartz.impl.StdSchedulerFactory;
+import org.springframework.scheduling.quartz.SchedulerFactoryBean;
+import org.springframework.web.bind.annotation.*;
+import xyz.fivemillion.todomanager.domain.Todo;
+import xyz.fivemillion.todomanager.dto.JobRequest;
+import xyz.fivemillion.todomanager.service.JobService;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
 public class MessageController {
 
-    private final SlackSendService slackSendService;
-    private final TodoList todoList;
+    private final JobService jobService;
+    private final SchedulerFactoryBean scheduler;
 
-    @GetMapping("/api/v1/slack/send/{index}")
-    private void sendToSlack(@PathVariable("index") int index) {
-        slackSendService.send(todoList.getTodo(index));
+    @PostMapping("/api/v1/slack/todo")
+    private String registerJob(@RequestBody Todo todo) throws SchedulerException {
+        if (jobService.registerJob(scheduler.getScheduler(), todo))
+            return "SUCCESS";
+        else return "FALSE";
     }
 
-    @GetMapping("/api/v1/slack/send/morning")
-    private void sendToSlackMorning() {
-        slackSendService.sendMorning(todoList.getTodoList());
-    }
 
-    @GetMapping("/api/v1/slack/send/night")
-    private void sendToSlackNight() {
-        slackSendService.sendNight(todoList.getTodoList());
+    @GetMapping("/api/v1/slack/todos")
+    private List<JobRequest> getTodoList() throws SchedulerException {
+        return jobService.getJobList(scheduler.getScheduler());
     }
 }

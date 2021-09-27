@@ -6,16 +6,18 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import xyz.fivemillion.todomanager.dto.payload.SlackPayload;
+import xyz.fivemillion.todomanager.util.PropertyUtil;
 
 @Slf4j
 @Component
-public class SlackSender implements Sender<SlackPayload> {
+public class SlackSender implements Sender<SlackPayload>{
 
-    private final RestTemplate restTemplate = new RestTemplate();
+    private static final RestTemplate restTemplate = new RestTemplate();
+    private static String url;
 
-    @Value("${slack.webhook-url.todo-manager}")
-    private String url;
-
+    private SlackSender(PropertyUtil propertyUtil) {
+        url = propertyUtil.getProperty("slack.webhook-url.todo-manager");
+    }
 
     @Override
     public void send(SlackPayload payload) {
