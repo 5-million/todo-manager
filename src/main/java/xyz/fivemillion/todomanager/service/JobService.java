@@ -2,16 +2,12 @@ package xyz.fivemillion.todomanager.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.*;
-import org.quartz.impl.StdSchedulerFactory;
-import org.springframework.context.ApplicationContext;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
-import org.springframework.scheduling.quartz.SpringBeanJobFactory;
 import org.springframework.stereotype.Service;
 import xyz.fivemillion.todomanager.domain.Todo;
 import xyz.fivemillion.todomanager.domain.TodoList;
 import xyz.fivemillion.todomanager.dto.JobRequest;
 import xyz.fivemillion.todomanager.job.SendMessageJob;
-import xyz.fivemillion.todomanager.service.send.SlackSendService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,9 +15,6 @@ import java.util.List;
 @Slf4j
 @Service
 public class JobService {
-
-    private SlackSendService slackSendService;
-    private ApplicationContext ctx;
 
     private JobService(TodoList todoList, SchedulerFactoryBean scheduler) throws SchedulerException {
         for (Todo todo : todoList.getTodoList()) {
@@ -37,7 +30,7 @@ public class JobService {
             JobDetail jobDetail =
                     JobBuilder
                             .newJob(SendMessageJob.class)
-//                            .withIdentity("job" + todo.getId())
+                            .withIdentity("job" + todo.getId())
                             .setJobData(jobDataMap).build();
             result = setJobSchedule(scheduler, jobDetail, todo);
         } catch (Exception e) {
@@ -51,8 +44,6 @@ public class JobService {
     private JobDataMap createJobDataMap(Todo todo) {
         JobDataMap jobDataMap = new JobDataMap();
         jobDataMap.put("todo", todo);
-        jobDataMap.put("SenderService", slackSendService);
-        jobDataMap.put("applicationContext", ctx);
 
         return jobDataMap;
     }
