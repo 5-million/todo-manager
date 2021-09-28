@@ -17,14 +17,4 @@ public class SlackSendService implements SendService {
     public void send(Todo todo) {
         slackSender.send(slackPayloadBuilder.build(todo));
     }
-
-    @Override
-    public void sendMorning(Todo[] todos) {
-        slackSender.send(slackPayloadBuilder.buildMorning(todos));
-    }
-
-    @Override
-    public void sendNight(Todo[] todos) {
-        slackSender.send(slackPayloadBuilder.buildNight(todos));
-    }
 }
