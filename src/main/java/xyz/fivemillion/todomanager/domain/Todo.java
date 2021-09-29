@@ -1,22 +1,35 @@
 package xyz.fivemillion.todomanager.domain;
 
+import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
+
+import static javax.persistence.FetchType.*;
 
 @Getter
+@Entity(name = "tbl_todo")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Todo {
 
+    @Id @GeneratedValue
     private Long id;
     private String todo;
     private String message;
     private String cron;
 
-    public static Todo create(Long id, String todo, String message, String cron) {
-        Todo newTodo = new Todo();
-        newTodo.id = id;
-        newTodo.todo = todo;
-        newTodo.message = message;
-        newTodo.cron = cron;
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 
-        return newTodo;
+    @Builder
+    public Todo(Long id, String todo, String message, String cron, User user) {
+        this.id = id;
+        this.todo = todo;
+        this.message = message;
+        this.cron = cron;
+        this.user = user;
     }
 }

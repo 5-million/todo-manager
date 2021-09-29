@@ -19,14 +19,17 @@ public class TodoList {
             String todo = propertyUtil.getProperty(key + ".todo");
             String message = propertyUtil.getProperty(key + ".message");
             String cron = propertyUtil.getProperty(key + ".cron");
-            todos[i] = Todo.create(id, todo, message, cron);
+            todos[i] = Todo.builder().id(id).todo(todo).message(message).cron(cron).build();
 
             if (i != 3)
                 sb.append(todo + "\n");
         }
 
-        todos[NUMBER_OF_TODOS] =
-                Todo.create(Long.valueOf(NUMBER_OF_TODOS), "오늘의 할 일", sb.toString(), "0 50 08 * * ?");
+        todos[NUMBER_OF_TODOS] = Todo.builder().id(Long.valueOf(NUMBER_OF_TODOS))
+                .todo("오늘의 할 일")
+                .message(sb.toString())
+                .cron("0 50 08 * * ?")
+                .build();
     }
 
     public Todo getTodo(int index) {
