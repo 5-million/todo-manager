@@ -15,6 +15,6 @@ public class SlackSendService implements SendService {
 
     @Override
     public void send(Todo todo) {
-        slackSender.send(slackPayloadBuilder.build(todo));
+        slackSender.send(todo.getUser().getWebhookUrl(), slackPayloadBuilder.build(todo));
     }
 }
