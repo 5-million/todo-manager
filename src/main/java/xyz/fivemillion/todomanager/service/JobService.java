@@ -5,20 +5,26 @@ import org.quartz.*;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 import org.springframework.stereotype.Service;
 import xyz.fivemillion.todomanager.domain.Todo;
-import xyz.fivemillion.todomanager.domain.TodoList;
 import xyz.fivemillion.todomanager.dto.JobRequest;
 import xyz.fivemillion.todomanager.job.SendMessageJob;
+import xyz.fivemillion.todomanager.repository.TodoRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
 public class JobService {
 
-    private JobService(TodoList todoList, SchedulerFactoryBean scheduler) throws SchedulerException {
-        for (Todo todo : todoList.getTodoList()) {
-            registerJob(scheduler.getScheduler(), todo);
+    private JobService(TodoRepository todoRepository, SchedulerFactoryBean scheduler) throws SchedulerException {
+        // 애플리케이션 실행시 등록된 todo가 있다면 스케줄에 추가
+        Optional<List<Todo>> opt = todoRepository.findAll();
+        if (opt.isPresent()) {
+            List<Todo> todos = opt.get();
+            for (Todo todo : todos) {
+                registerJob(scheduler.getScheduler(), todo);
+            }
         }
     }
 

@@ -4,5 +4,5 @@ import xyz.fivemillion.todomanager.dto.payload.Payload;
 
 public interface Sender<T extends Payload> {
 
-    public  void send(T payload);
+    void send(String url, T payload);
 }

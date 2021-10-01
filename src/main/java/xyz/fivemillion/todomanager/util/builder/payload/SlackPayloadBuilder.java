@@ -15,16 +15,6 @@ public class SlackPayloadBuilder implements PayloadBuilder<SlackPayload> {
         return build(MessageBuilder.build(todo));
     }
 
-    @Override
-    public SlackPayload buildMorning(Todo[] todos) {
-        return build(MessageBuilder.buildMorningMessage(todos));
-    }
-
-    @Override
-    public SlackPayload buildNight(Todo[] todos) {
-        return build(MessageBuilder.buildNightMessage(todos));
-    }
-
     private SlackPayload build(String message) {
         return SlackPayload.builder().text(message).build();
     }
