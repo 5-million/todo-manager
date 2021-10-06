@@ -5,6 +5,7 @@ import org.quartz.*;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 import org.springframework.stereotype.Service;
 import xyz.fivemillion.todomanager.domain.Todo;
+import xyz.fivemillion.todomanager.dto.JobInfo;
 import xyz.fivemillion.todomanager.dto.JobRequest;
 import xyz.fivemillion.todomanager.job.SendMessageJob;
 import xyz.fivemillion.todomanager.repository.TodoRepository;
@@ -17,7 +18,13 @@ import java.util.Optional;
 @Service
 public class JobService {
 
+    private final TodoRepository todoRepository;
+    private final SchedulerFactoryBean scheduler;
+
     private JobService(TodoRepository todoRepository, SchedulerFactoryBean scheduler) throws SchedulerException {
+        this.todoRepository = todoRepository;
+        this.scheduler = scheduler;
+
         // 애플리케이션 실행시 등록된 todo가 있다면 스케줄에 추가
         Optional<List<Todo>> opt = todoRepository.findAll();
         if (opt.isPresent()) {
@@ -36,7 +43,7 @@ public class JobService {
             JobDetail jobDetail =
                     JobBuilder
                             .newJob(SendMessageJob.class)
-                            .withIdentity("job" + todo.getId())
+                            .withIdentity(todo.getTodo())
                             .setJobData(jobDataMap).build();
             result = setJobSchedule(scheduler, jobDetail, todo);
         } catch (Exception e) {
@@ -57,7 +64,7 @@ public class JobService {
     private boolean setJobSchedule(Scheduler scheduler, JobDetail jobDetail, Todo todo) {
         try {
             Trigger trigger = TriggerBuilder.newTrigger()
-                    .withIdentity("job" + todo.getId())
+                    .withIdentity("trigger_" + todo.getUser().getUserId() + "_" + todo.getId())
                     .withSchedule(CronScheduleBuilder.cronSchedule(todo.getCron()))
                     .build();
             scheduler.scheduleJob(jobDetail, trigger);
@@ -71,15 +78,25 @@ public class JobService {
         return true;
     }
 
-    public List<JobRequest> getJobList(Scheduler scheduler) {
-        List<JobRequest> result = new ArrayList<>();
+    public List<JobInfo> getJobList(Scheduler scheduler) {
+        List<JobInfo> result = new ArrayList<>();
 
         try {
             for (JobKey jobKey : scheduler.getJobKeys(null)) {
                 scheduler.getTriggersOfJob(jobKey).stream().forEach(trigger -> {
-                    JobRequest request =
-                            new JobRequest(((Trigger) trigger).getKey().getName(), jobKey.getName(), "");
-                    result.add(request);
+                    Long todoId = Long.parseLong(
+                            ((Trigger) trigger).getKey().getName().split("_")[2]
+                    );
+
+                    Todo todo = todoRepository.findById(todoId).get();
+
+                    JobInfo info = JobInfo.builder()
+                            .userId(todo.getUser().getUserId())
+                            .jobName(todo.getTodo())
+                            .cron(todo.getCron())
+                            .build();
+
+                    result.add(info);
                 });
             }
         } catch (SchedulerException e) {

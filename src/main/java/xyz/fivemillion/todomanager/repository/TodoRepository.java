@@ -29,6 +29,16 @@ public class TodoRepository {
         em.persist(todo);
     }
 
+    public Optional<Todo> findById(Long id) {
+        Todo todo = query.select(this.todo)
+                .from(this.todo)
+                .join(this.todo.user, user).fetchJoin()
+                .where(this.todo.id.eq(id))
+                .fetchOne();
+
+        return Optional.ofNullable(todo);
+    }
+
     public Optional<List<Todo>> findAll() {
         List<Todo> todos = query.select(todo)
                 .from(todo)
