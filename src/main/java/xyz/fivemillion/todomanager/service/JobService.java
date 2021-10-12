@@ -7,8 +7,10 @@ import org.springframework.stereotype.Service;
 import xyz.fivemillion.todomanager.domain.Todo;
 import xyz.fivemillion.todomanager.dto.JobInfo;
 import xyz.fivemillion.todomanager.dto.JobRequest;
+import xyz.fivemillion.todomanager.dto.todo.TodoInfo;
 import xyz.fivemillion.todomanager.job.SendMessageJob;
 import xyz.fivemillion.todomanager.repository.TodoRepository;
+import xyz.fivemillion.todomanager.util.JobUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -83,18 +85,19 @@ public class JobService {
 
         try {
             for (JobKey jobKey : scheduler.getJobKeys(null)) {
+                Todo todo = getTodo(scheduler.getJobDetail(jobKey).getJobDataMap());
                 scheduler.getTriggersOfJob(jobKey).stream().forEach(trigger -> {
-                    Long todoId = Long.parseLong(
-                            ((Trigger) trigger).getKey().getName().split("_")[2]
-                    );
-
-                    Todo todo = todoRepository.findById(todoId).get();
 
                     JobInfo info = JobInfo.builder()
+                            .jobName(jobKey.getName())
+                            .triggerName(trigger.getKey().getName())
                             .userId(todo.getUser().getUserId())
-                            .jobName(todo.getTodo())
-                            .cron(todo.getCron())
-                            .build();
+                            .todoInfo(
+                                    TodoInfo.builder()
+                                            .todo(todo.getTodo())
+                                            .message(todo.getMessage())
+                                            .build()
+                            ).build();
 
                     result.add(info);
                 });
@@ -105,5 +108,9 @@ public class JobService {
         }
 
         return result;
+    }
+
+    private Todo getTodo(JobDataMap jobDataMap) {
+        return JobUtils.getFromJobDataMap(jobDataMap, Todo.class, "todo");
     }
 }
