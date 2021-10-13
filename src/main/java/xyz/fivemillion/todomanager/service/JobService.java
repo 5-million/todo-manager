@@ -6,7 +6,6 @@ import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 import org.springframework.stereotype.Service;
 import xyz.fivemillion.todomanager.domain.Todo;
 import xyz.fivemillion.todomanager.dto.JobInfo;
-import xyz.fivemillion.todomanager.dto.JobRequest;
 import xyz.fivemillion.todomanager.dto.todo.TodoInfo;
 import xyz.fivemillion.todomanager.job.SendMessageJob;
 import xyz.fivemillion.todomanager.repository.TodoRepository;
