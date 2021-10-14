@@ -1,15 +1,14 @@
 package xyz.fivemillion.todomanager.service.scheduler;
 
+import org.quartz.Job;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
-import org.springframework.stereotype.Service;
 import xyz.fivemillion.todomanager.dto.ScheduleInfo;
-import xyz.fivemillion.todomanager.dto.ScheduleRequest;
+import xyz.fivemillion.todomanager.dto.TodoScheduleRequest;
 import xyz.fivemillion.todomanager.job.SendMessageJob;
 
 import java.util.List;
 
-@Service
 public class TodoScheduleService extends AbstractScheduleService implements ScheduleService {
 
     public TodoScheduleService(Scheduler scheduler) {
@@ -17,9 +16,9 @@ public class TodoScheduleService extends AbstractScheduleService implements Sche
     }
 
     @Override
-    public void register(ScheduleRequest request) throws SchedulerException {
+    public void register(Class<? extends Job> job, TodoScheduleRequest request) throws SchedulerException {
         setScheduleJob(
-                buildJobDetail(SendMessageJob.class, request.getJobId(), request.getGroup(), request.getJobData()),
+                buildJobDetail(job, request.getJobId(), request.getGroup(), request.getJobData()),
                 buildTrigger(request.getTriggerId(), request.getGroup(), request.getCronExp())
         );
     }

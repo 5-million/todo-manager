@@ -1,14 +1,15 @@
 package xyz.fivemillion.todomanager.service.scheduler;
 
+import org.quartz.Job;
 import org.quartz.SchedulerException;
 import xyz.fivemillion.todomanager.dto.ScheduleInfo;
-import xyz.fivemillion.todomanager.dto.ScheduleRequest;
+import xyz.fivemillion.todomanager.dto.TodoScheduleRequest;
 
 import java.util.List;
 
 public interface ScheduleService {
 
-    void register(ScheduleRequest request) throws SchedulerException;
+    void register(Class<? extends Job> job, TodoScheduleRequest request) throws SchedulerException;
     void modify();
     void delete();
     void getScheduler();

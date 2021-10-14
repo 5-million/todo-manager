@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import xyz.fivemillion.todomanager.domain.Todo;
 import xyz.fivemillion.todomanager.dto.*;
 import xyz.fivemillion.todomanager.dto.todo.TodoRegisterRequest;
+import xyz.fivemillion.todomanager.job.SendMessageJob;
 import xyz.fivemillion.todomanager.service.scheduler.ScheduleService;
 import xyz.fivemillion.todomanager.service.TodoService;
 
@@ -23,7 +24,7 @@ public class TodoController {
     @ResponseStatus(HttpStatus.CREATED)
     public void register(@RequestBody TodoRegisterRequest request) throws SchedulerException {
         Todo todo = todoService.register(request);
-        scheduleService.register(ScheduleRequest.build(request, todo));
+        scheduleService.register(SendMessageJob.class, TodoScheduleRequest.build(todo));
     }
 
     @GetMapping("/api/v1/todo")
