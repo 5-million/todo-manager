@@ -5,7 +5,6 @@ import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import xyz.fivemillion.todomanager.dto.ScheduleInfo;
 import xyz.fivemillion.todomanager.dto.TodoScheduleRequest;
-import xyz.fivemillion.todomanager.job.SendMessageJob;
 
 import java.util.List;
 

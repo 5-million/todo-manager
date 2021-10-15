@@ -8,7 +8,7 @@ import xyz.fivemillion.todomanager.domain.User;
 import xyz.fivemillion.todomanager.dto.TodoScheduleRequest;
 import xyz.fivemillion.todomanager.job.MorningMsgSender;
 import xyz.fivemillion.todomanager.job.NightMsgSender;
-import xyz.fivemillion.todomanager.job.SendMessageJob;
+import xyz.fivemillion.todomanager.job.MsgSenderJob;
 import xyz.fivemillion.todomanager.service.scheduler.ScheduleService;
 
 import javax.annotation.PostConstruct;
@@ -34,7 +34,7 @@ public class InitService {
     private void initSchedule() throws SchedulerException {
         for (User user : todoGroupByUser.keySet()) {
             for (Todo todo : todoGroupByUser.get(user)) {
-                scheduleService.register(SendMessageJob.class, TodoScheduleRequest.build(todo));
+                scheduleService.register(MsgSenderJob.class, TodoScheduleRequest.build(todo));
             }
         }
     }
