@@ -8,6 +8,7 @@ import xyz.fivemillion.todomanager.domain.Todo;
 import xyz.fivemillion.todomanager.dto.*;
 import xyz.fivemillion.todomanager.dto.todo.TodoRegisterRequest;
 import xyz.fivemillion.todomanager.job.MsgSenderJob;
+import xyz.fivemillion.todomanager.job.SimpleJob;
 import xyz.fivemillion.todomanager.service.scheduler.ScheduleService;
 import xyz.fivemillion.todomanager.service.TodoService;
 
@@ -31,5 +32,12 @@ public class TodoController {
     public Response getTodoList(@RequestParam("userid") String userId) throws SchedulerException {
         List<ScheduleInfo> schedulerList = scheduleService.getSchedulerList(userId);
         return new Response(schedulerList);
+    }
+
+    @DeleteMapping("/api/v1/todo")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@RequestParam("jobid") String jobId, @RequestParam("group") String group)
+            throws SchedulerException {
+        scheduleService.delete(jobId, group);
     }
 }
