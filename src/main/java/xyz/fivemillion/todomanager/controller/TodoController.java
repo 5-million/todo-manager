@@ -8,7 +8,6 @@ import xyz.fivemillion.todomanager.domain.Todo;
 import xyz.fivemillion.todomanager.dto.*;
 import xyz.fivemillion.todomanager.dto.todo.TodoRegisterRequest;
 import xyz.fivemillion.todomanager.job.MsgSenderJob;
-import xyz.fivemillion.todomanager.job.SimpleJob;
 import xyz.fivemillion.todomanager.service.scheduler.ScheduleService;
 import xyz.fivemillion.todomanager.service.TodoService;
 
