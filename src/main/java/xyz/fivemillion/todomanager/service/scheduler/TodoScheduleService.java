@@ -1,6 +1,7 @@
 package xyz.fivemillion.todomanager.service.scheduler;
 
 import org.quartz.Job;
+import org.quartz.JobKey;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import xyz.fivemillion.todomanager.dto.ScheduleInfo;
@@ -28,8 +29,8 @@ public class TodoScheduleService extends AbstractScheduleService implements Sche
     }
 
     @Override
-    public void delete() {
-
+    public void delete(String jobId, String group) throws SchedulerException {
+        deleteSchedule(jobId, group);
     }
 
     @Override

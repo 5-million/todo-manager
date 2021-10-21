@@ -49,4 +49,9 @@ public class AbstractScheduleService {
     protected List<ScheduleInfo> getSchedulerList(String group) throws SchedulerException {
         return getter.getSchedulerList(scheduler, GroupMatcher.jobGroupEquals(group));
     }
+
+    protected void deleteSchedule(String jobId, String group) throws SchedulerException {
+        JobKey jobKey = new JobKey(jobId, group);
+        scheduler.deleteJob(jobKey);
+    }
 }

@@ -32,4 +32,11 @@ public class TodoController {
         List<ScheduleInfo> schedulerList = scheduleService.getSchedulerList(userId);
         return new Response(schedulerList);
     }
+
+    @DeleteMapping("/api/v1/todo")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@RequestParam("jobid") String jobId, @RequestParam("group") String group)
+            throws SchedulerException {
+        scheduleService.delete(jobId, group);
+    }
 }
