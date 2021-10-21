@@ -2,6 +2,7 @@ package xyz.fivemillion.todomanager.service.scheduler;
 
 import org.quartz.*;
 import org.quartz.impl.matchers.GroupMatcher;
+import xyz.fivemillion.todomanager.dto.RescheduleRequest;
 import xyz.fivemillion.todomanager.dto.ScheduleInfo;
 
 import java.util.List;
@@ -44,6 +45,16 @@ public class AbstractScheduleService {
         }
 
         return jobDataMap;
+    }
+
+    protected void reschedule(String triggerName, String group, String newCronExp) throws SchedulerException {
+        TriggerKey triggerKey = new TriggerKey(triggerName, group);
+        Trigger newTrigger = TriggerBuilder.newTrigger()
+                .withIdentity(triggerKey)
+                .withSchedule(CronScheduleBuilder.cronSchedule(newCronExp))
+                .build();
+
+        scheduler.rescheduleJob(triggerKey, newTrigger);
     }
 
     protected List<ScheduleInfo> getSchedulerList(String group) throws SchedulerException {

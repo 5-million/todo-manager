@@ -1,9 +1,9 @@
 package xyz.fivemillion.todomanager.service.scheduler;
 
 import org.quartz.Job;
-import org.quartz.JobKey;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
+import xyz.fivemillion.todomanager.dto.RescheduleRequest;
 import xyz.fivemillion.todomanager.dto.ScheduleInfo;
 import xyz.fivemillion.todomanager.dto.TodoScheduleRequest;
 
@@ -24,8 +24,8 @@ public class TodoScheduleService extends AbstractScheduleService implements Sche
     }
 
     @Override
-    public void modify() {
-
+    public void modify(RescheduleRequest request) throws SchedulerException {
+        reschedule(request.getTriggerName(), request.getGroup(), request.getNewCronExp());
     }
 
     @Override

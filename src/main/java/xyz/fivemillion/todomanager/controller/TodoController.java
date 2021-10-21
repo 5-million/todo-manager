@@ -33,6 +33,12 @@ public class TodoController {
         return new Response(schedulerList);
     }
 
+    @PatchMapping("/api/v1/todo")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void reschedule(@RequestBody RescheduleRequest request) throws SchedulerException {
+        scheduleService.modify(request);
+    }
+
     @DeleteMapping("/api/v1/todo")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@RequestParam("jobid") String jobId, @RequestParam("group") String group)
