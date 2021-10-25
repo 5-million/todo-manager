@@ -45,10 +45,12 @@ public class InitService {
 
             String MORNING_CRON_EXP = "0 50 08 * * ?";
             TodoScheduleRequest morningRequest = buildTodoScheduleRequest(user, todos, MORNING_CRON_EXP);
+            morningRequest.setGroup("m_smry");
             scheduleService.register(MorningMsgSender.class, morningRequest);
 
             String NIGHT_CRON_EXP = "0 0 21 * * ?";
             TodoScheduleRequest nightRequest = buildTodoScheduleRequest(user, todos, NIGHT_CRON_EXP);
+            nightRequest.setGroup("n_smry");
             scheduleService.register(NightMsgSender.class, nightRequest);
         }
     }
