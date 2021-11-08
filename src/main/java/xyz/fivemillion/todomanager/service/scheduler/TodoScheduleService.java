@@ -34,11 +34,6 @@ public class TodoScheduleService extends AbstractScheduleService implements Sche
     }
 
     @Override
-    public void getScheduler() {
-
-    }
-
-    @Override
     public List<ScheduleInfo> getSchedulerList(String group) throws SchedulerException {
         return super.getSchedulerList(group);
     }

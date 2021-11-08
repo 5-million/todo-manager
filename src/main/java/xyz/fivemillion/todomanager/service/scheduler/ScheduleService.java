@@ -13,6 +13,5 @@ public interface ScheduleService {
     void register(Class<? extends Job> job, TodoScheduleRequest request) throws SchedulerException;
     void modify(RescheduleRequest request) throws SchedulerException;
     void delete(String jobId, String group) throws SchedulerException;
-    void getScheduler();
     List<ScheduleInfo> getSchedulerList(String group) throws SchedulerException;
 }

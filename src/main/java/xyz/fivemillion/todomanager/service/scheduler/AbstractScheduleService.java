@@ -2,7 +2,6 @@ package xyz.fivemillion.todomanager.service.scheduler;
 
 import org.quartz.*;
 import org.quartz.impl.matchers.GroupMatcher;
-import xyz.fivemillion.todomanager.dto.RescheduleRequest;
 import xyz.fivemillion.todomanager.dto.ScheduleInfo;
 
 import java.util.List;

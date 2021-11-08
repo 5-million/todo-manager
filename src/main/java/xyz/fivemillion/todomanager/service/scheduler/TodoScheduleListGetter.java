@@ -11,11 +11,6 @@ import java.util.List;
 
 public class TodoScheduleListGetter implements ScheduleListGetter {
 
-    /**
-     * morning, night 메시지 스케줄러 리스트를 뽑아올 때 todo가 존재하지 않기 때문에 todo의 getter에서 NullPointerException 발생
-     * 해결 필요
-     */
-
     @Override
     public List<ScheduleInfo> getSchedulerList(Scheduler scheduler, GroupMatcher<JobKey> matcher) throws SchedulerException {
         List<ScheduleInfo> list = new ArrayList<>();
