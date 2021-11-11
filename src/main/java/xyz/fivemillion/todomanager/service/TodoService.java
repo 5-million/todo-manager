@@ -38,4 +38,13 @@ public class TodoService {
         if (opt.isEmpty()) return null;
         return opt.get();
     }
+
+    @Transactional
+    public void updateCron(Long todoId, String newCronExp) {
+        Optional<Todo> opt = todoRepository.findById(todoId);
+        if (!opt.isEmpty()) {
+            Todo todo = opt.get();
+            todo.updateCron(newCronExp);
+        }
+    }
 }

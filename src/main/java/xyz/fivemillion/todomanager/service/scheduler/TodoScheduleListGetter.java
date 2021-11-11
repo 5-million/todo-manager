@@ -24,6 +24,9 @@ public class TodoScheduleListGetter implements ScheduleListGetter {
                 info.setTriggerId(trigger.getKey().getName());
                 info.setGroup(jobKey.getGroup());
 
+                if (trigger instanceof CronTrigger)
+                    info.setCronExp(((CronTrigger) trigger).getCronExpression());
+
                 info.getJobData().put("todoId", todo.getId());
                 info.getJobData().put("todo", todo.getTodo());
                 info.getJobData().put("message", todo.getMessage());
