@@ -36,6 +36,7 @@ public class TodoController {
     @PatchMapping("/api/v1/todo")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void reschedule(@RequestBody RescheduleRequest request) throws SchedulerException {
+        todoService.updateCron(request.getTodoId(), request.getNewCronExp());
         scheduleService.modify(request);
     }
 

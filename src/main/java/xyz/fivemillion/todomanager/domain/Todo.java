@@ -32,4 +32,8 @@ public class Todo {
         this.cron = cron;
         this.user = user;
     }
+
+    public void updateCron(String newCronExp) {
+        this.cron = newCronExp;
+    }
 }

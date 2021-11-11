@@ -11,5 +11,6 @@ public class ScheduleInfo {
     private String jobId;
     private String triggerId;
     private String group;
+    private String cronExp;
     private Map<String, Object> jobData = new HashMap<>();
 }
